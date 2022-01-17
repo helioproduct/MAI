@@ -15,7 +15,6 @@ bool is_palindrom(long long number)
         reversed_number = reversed_number * 10 + number % 10;
         number /= 10;
     }
-
     return saved_number == reversed_number;
 }
 

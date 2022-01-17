@@ -5,19 +5,18 @@
 // Сложность: O(1)
 char get_reversed_byte(char number)
 {
-    int reversed_byte = 0;
-    for (int shift = CHAR_BIT; shift >= 0; shift--)
+    char reversed_byte = 0;
+    for (int i = 0; i < CHAR_BIT; i++)
     {
-        int bit = number >> shift & 1;           
-        reversed_byte |=  bit << CHAR_BIT - shift;
-    }        
+        int bit = (number >> i) & 1;
+        reversed_byte |= bit << CHAR_BIT - 1 - i;
+    }     
     return reversed_byte;
 }
 
-
 int main(void)
 {
-    int number;
+    char number;
     scanf("%d", &number);
     printf("%d", get_reversed_byte(number));   
     return 0;
