@@ -19,7 +19,7 @@ bool is_palindrom(long long number)
     return saved_number == reversed_number;
 }
 
-int main()
+int main(void)
 {
     long long number;
     scanf("%lld", &number);
