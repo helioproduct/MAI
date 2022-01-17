@@ -3,13 +3,13 @@
 #include <limits.h>
 
 // Сложность: O(1)
-int get_reversed_byte(int number)
+char get_reversed_byte(char number)
 {
     int reversed_byte = 0;
-    for (int shift = 7; shift >= 0; shift--)
+    for (int shift = CHAR_BIT; shift >= 0; shift--)
     {
         int bit = number >> shift & 1;           
-        reversed_byte |=  bit << 7 - shift;
+        reversed_byte |=  bit << CHAR_BIT - shift;
     }        
     return reversed_byte;
 }
