@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Сложность: O(n*m)
 int main(void)
 {
     // Степени многочленов
-    int p1, p2;
+    int p1, p2; 
     scanf("%d", &p1);
     //Коэффициенты многочлена (1)
     int *k1 = (int*) malloc(sizeof(int) * (p1 + 1));
