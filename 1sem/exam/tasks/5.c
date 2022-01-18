@@ -8,9 +8,7 @@ bool is_prime(long long number)
     while (i * i <= number)
     {   
         if (number % i == 0)
-        {
             return false;
-        }
         i++;
     }
     return true;
