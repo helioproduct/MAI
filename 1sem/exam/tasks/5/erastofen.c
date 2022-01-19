@@ -5,7 +5,7 @@
 #define N 3571
 
 // Сложность: O(n*log(log n))
-int main()
+int main(void)
 {
     unsigned int start_time = clock();
 

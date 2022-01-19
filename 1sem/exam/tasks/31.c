@@ -1,26 +1,44 @@
 #include <stdio.h>
 #include <math.h>
 
-double f(double x) {
-	return sin(x);
+double min(double a, double b)
+{
+    return a < b ? a : b;
 }
 
-int main() {
-	double dx = 0.1, dy = 0.1, mx = -4, Mx = 4, my = -1, My = 1;
-	char s = '#';
+double max(double a, double b)
+{
+    return a > b ? a : b;
+}
 
-	double y = My;
-	for (int i = 0; y >= my; i++, y = My - i*dy) {
-		double x = mx;
-		for (int j = 0; x <= Mx; j++, x = mx + j*dx) {
-			if ((f(x) < y + dy/2) && (f(x) > y - dy/2)) printf("%c", s);
-			else {
-				if ((x > -dx/2) && (x < dx/2)) printf("|");
-				else if ((y > -dy/2) && (y < dy/2)) printf("-");
-				else printf(" ");
-			} 
-			// printf("(%.2f,%.2f) ", x, y);
-		}
-		printf("\n");
-	}
+int main(void)
+{
+    int width = 80;
+    double start = 0;
+    double end = 2 * asin(-1);
+    double step = 0.1;
+
+    double f_min = sin(start);
+    double f_max = sin(start);
+
+    for (double i = start + step; i < end; i += step)
+    {
+        f_min = min(f_min, sin(i));
+        f_max = max(f_max, sin(i));
+    }
+
+    printf("%lf %lf", f_min, f_max);
+
+    for (double i = start; i < end; i += step)
+    {
+        // Кол-во знаков, которые надо распечатать
+        int n = (sin(i) - f_min) / (f_max - f_min) * width;
+        for (int j = 0; j < n; j++)
+        {
+            printf("*");
+        }  
+        printf("\n");
+    }
+
+    return 0;
 }
