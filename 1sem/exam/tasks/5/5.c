@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
-// Сложность: O(n)
+// Сложность: O(sqrt(n))
 bool is_prime(long long number)
 {   
     long long  i = 2;
@@ -14,8 +15,11 @@ bool is_prime(long long number)
     return true;
 }
 
+// Сложность: O(n * sqrt(n))
 int main(void)
 {
+    unsigned int start_time = clock();
+
     int count = 0;
     long long x = 2;
     while (count < 500)
@@ -27,4 +31,8 @@ int main(void)
         }
         x++;
     }
+
+    unsigned int end_time = clock();
+    printf("TIME: %d", end_time - start_time);
+    return 0;
 }
