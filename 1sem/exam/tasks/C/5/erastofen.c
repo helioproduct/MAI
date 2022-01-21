@@ -1,14 +1,24 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
+#include <math.h>
 
-#define N 3571
+/*
+Кол-во простых чисел на отрезке [1, n]
+растет с увеличением n как n / ln(n)
 
-// Сложность: O(n*log(log n))
+Сложность: O(n*log(log n))
+*/
+ 
 int main(void)
 {
-    unsigned int start_time = clock();
-
+    int n = 2;
+    while (n / log(n) < 500)
+    {
+        n++;
+    }
+    const int N = n;
+        
     bool prime[N + 1]; 
     for (int i = 0; i <= N; i++)
         prime[i] = true;
@@ -21,8 +31,6 @@ int main(void)
                     prime[j] = false;
     }
 
-    unsigned int end_time = clock();
-
     int count = 0, x = 2;
     while (count < 500 && x <= N)
     {
@@ -33,7 +41,5 @@ int main(void)
         }
         x++;
     }
-
-    printf("TIME: %d", end_time - start_time);
     return 0;
 }
