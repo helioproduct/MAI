@@ -4,7 +4,7 @@
 // Проверка палиндрома числа
 //  Сложность: O(log n)
 
-bool is_palindrom(long long number)
+bool is_palindrom(int number)
 {  
     long long saved_number, reversed_number;
     saved_number = number;
@@ -15,13 +15,12 @@ bool is_palindrom(long long number)
         reversed_number = reversed_number * 10 + number % 10;
         number /= 10;
     }
-
     return saved_number == reversed_number;
 }
 
-int main()
+int main(void)
 {
-    long long number;
+    int number;
     scanf("%lld", &number);
     printf(is_palindrom ? "YES" : "NO");
     return 0;
