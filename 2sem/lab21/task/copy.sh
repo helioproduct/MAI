@@ -21,6 +21,8 @@ function copy_files
 	for file in "${files_to_copy[@]}"
 	do
 		# cp ${sync_parameters[src]}"/"$file ${sync_parameters[dst]}"/"${sync_parameters[prefix]}$file
+		# touch ${sync_parameters[dst]}"/"${sync_parameters[prefix]}$file
+		# echo "${sync_parameters[dst]}"/"${sync_parameters[prefix]}$file"
     	cat ${sync_parameters[src]}"/"$file > ${sync_parameters[dst]}"/"${sync_parameters[prefix]}$file
 	done
 }
@@ -58,3 +60,4 @@ parse_args "$@"
 get_write_protected_files
 copy_files
 change_files_permissions
+
