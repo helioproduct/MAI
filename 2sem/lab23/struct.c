@@ -27,6 +27,10 @@ int main(void)
 {
 	// point p = make_point(3, 2);
 	point *p = make_point2(0, 1);
-	printf("x: %d, y: %d", p->x, p->y);
+	
+	// (1) and (2) are equal
+	printf("x: %d, y: %d\n", p->x, p->y);   // (1)
+	printf("x: %d, y: %d", (*p).x, (*p).y); // (2)
+
 	return 0;	
 }
