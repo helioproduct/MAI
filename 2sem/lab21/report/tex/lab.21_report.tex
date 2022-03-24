@@ -1,0 +1,82 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage[english,russian]{babel}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+
+\title{\textbf{Отчет по лабораторной работе № 21}}
+\author{Студент группы М80-108Б-21 Попов Николай Александрович}
+\date{22 марта 2022 г.}
+
+\begin{document}
+\maketitle
+
+\begin{tabular}{|p{4cm}|p{8cm}|}
+\hline
+Студент & Попов Н. А. \\
+\hline
+Группа & М80-108Б-21 \\
+\hline
+Преподаватель & Трубченко Н. М. \\ 
+\hline
+Вариант & 1 \\
+\hline
+Дата & 10.03.22 \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section*{Цель работы}
+Составить программу выполнения заданных действий над файлами на одном
+из интерпретируемых командных языков OC UNIX \\ (Shell, Cshell, Bash, ...) 
+
+\section*{Задание}
+Копирование всех файлов, для которых установлена защита от записи от всех
+пользователей. Имена копий герерировать путем добавления указанного префикса.
+Файлы-копии должны быть доступны для записи всем пользователям.
+
+\section*{Оборудование (студента)}
+Процессор AMD Ryzen 7 5700U @ 4.30 GHz с ОП 16 Гб
+
+\section*{Программное обеспечение (студента)}
+Операционная система семейства Linux, наименование Manjaro Linux,
+интерпретатор команд Bash версии 5.0
+
+\section*{Идея, метод, алогоритм решения задачи}
+% Usage: ./copy_wt.sh --src=[] --dst=[] --prefix=[]
+
+Вывод команды \textit{ls --l} в директории \textit{--src} передаем
+команде \textit{grep} и фильтруем ее вывод при помощи регулярного выражения.
+Из полученного результата формируем массив имен файлов. Создаем новые файлы в директории \textit{--dst} с указанным префиксом, записываем в них содержимое
+соотвествующих файлов из директории \textit{--src} \\
+
+\newpage
+\section*{Распечатка протокола}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.2]{screenshot1.png}
+\caption{Содержимое директориии \textit{--src}}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.2]{screenshot2.png}
+\caption{Использование скрипта: \textit{./copy.sh --src=[] --dst=[] --prefix=[]}}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.2]{screenshot3.png}
+\caption{Содержимое \textit{--dst} после применения скрипта к директории \textit{--src}}
+\end{figure}
+
+\section*{Вывод}
+Данная работа впервые познакомила меня с интерпретируемым языком программирования Bash.
+Я научился использовать его для написания небольших программ, работающих внутри OC UNIX. 
+
+\end{document}
