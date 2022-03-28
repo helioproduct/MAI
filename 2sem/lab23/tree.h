@@ -1,7 +1,8 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
-#include <node.h>
+
+#include "node.h"
 
 typedef struct Tree {
 	Node root;
