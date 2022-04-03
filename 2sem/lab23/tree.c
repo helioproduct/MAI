@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <stdbool.h>
 #include "node.h"
 
 Node *create_node(int value)
@@ -14,6 +14,38 @@ Node *create_node(int value)
 	return result;
 }
 
+bool insert_node(Node **rootptr, int value)
+{
+	Node *root = *rootptr;
+
+	if (root == NULL) {
+		(*rootptr) = create_node(value); 
+		return true;
+	}
+	else if (value == root->value) {
+		return false;
+	}
+	else if (value < root->value) {
+		return insert_node(&(root->left), value);
+	}
+	return insert_node(&(root->right), value);
+}
+
+bool find_node(Node *root, int value)
+{
+	if (root == NULL) {
+		return false;
+	}
+	else if (value == root->value) {
+		return true;
+	}
+	else if (value < root->value) {
+		return find_node(root->left, value);
+	}
+	return find_node(root->right, value);
+
+}
+
 void print_tabs(int level)
 {
 	for (int i = 0; i < level; i++)
@@ -21,7 +53,6 @@ void print_tabs(int level)
 		printf("\t");
 	}
 }
-
 
 void print_tree_rec(Node *root, int level)
 {
@@ -31,7 +62,6 @@ void print_tree_rec(Node *root, int level)
 		return;
 	}
 
-	print_tabs(level);
 	printf("value = %d\n", root->value);
 	
 	print_tabs(level);
@@ -55,28 +85,18 @@ void print_tree(Node *root)
 	print_tree_rec(root, 0);
 }
 
-
 int main(void)
 {
-	Node *n1 = create_node(10);
-	Node *n2 = create_node(11);
-	Node *n3 = create_node(12);
-	Node *n4 = create_node(13);
-	Node *n5 = create_node(14);
+	Node *root = NULL;
 
-	// connecting into tree
-	n1->left = n2;
-	n1->right = n3;
-	n3->left = n4;
-	n3->right = n5;
+	insert_node(&root, 15);
+	insert_node(&root, 11);
+	insert_node(&root, 24);
+	insert_node(&root, 5);
+	insert_node(&root, 19);
+	insert_node(&root, 16);
 
-	print_tree(n1);
-
-	free(n1);
-	free(n2);
-	free(n3);
-	free(n4);
-	free(n5);
-
+	print_tree(root);
+	
 	return 0;
 }
