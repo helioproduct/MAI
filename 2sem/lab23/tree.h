@@ -1,6 +1,5 @@
-#ifndef _TREE_H_
-#define _TREE_H_
-
+#ifndef TREE
+#define TREE
 
 #include "node.h"
 
@@ -9,8 +8,7 @@ typedef struct Tree {
 } Tree;
 
 Tree *create_tree(Node root_value);
-Tree *tree_add_node(Tree *tree);
+Tree *add_node(Tree *tree);
 void print_tree(Tree *tree);
 
-
-#endif // _TREE_H_
+#endif // NODE
