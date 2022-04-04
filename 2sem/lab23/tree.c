@@ -43,7 +43,6 @@ bool find_node(Node *root, int value)
 		return find_node(root->left, value);
 	}
 	return find_node(root->right, value);
-
 }
 
 void print_tabs(int level)
@@ -88,7 +87,9 @@ void print_tree(Node *root)
 int main(void)
 {
 	Node *root = NULL;
+	Node *root2 = NULL;
 
+	/*
 	insert_node(&root, 15);
 	insert_node(&root, 11);
 	insert_node(&root, 24);
@@ -96,7 +97,8 @@ int main(void)
 	insert_node(&root, 19);
 	insert_node(&root, 16);
 
-	print_tree(root);
-	
+
+	*/
+
 	return 0;
 }
