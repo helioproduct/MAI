@@ -30,7 +30,7 @@ bool insert_node(Node **rootptr, int value)
 	}
 	return insert_node(&(root->right), value);
 }
-
+	
 bool find_node(Node *root, int value)
 {
 	if (root == NULL) {
@@ -43,6 +43,49 @@ bool find_node(Node *root, int value)
 		return find_node(root->left, value);
 	}
 	return find_node(root->right, value);
+}
+
+Node* min_value_node(Node *node)
+{
+	Node *current = node;
+	while (current != NULL && current->left != NULL)
+		current = current->left;
+	return current;
+}
+
+bool remove_node(Node *root, Node *prev, int value)
+{
+	if (root == NULL) {
+		return false;
+	}
+	else if (value == root->value) {
+		if (root->left == NULL && root->right == NULL)  {
+			if (value < prev->value) {
+				prev->left = NULL;
+			} else {
+				prev->right = NULL;
+			}
+			return true;
+		}
+		else if (root->left == NULL || root->right == NULL) {
+			Node *child = root->left != NULL ? root->left : root->right;
+			if (value < prev->value) {
+				prev->left = child;
+			} else {
+				prev->right = child;
+			}
+			return true;
+		}
+
+		Node *min_node = min_value_node(root->right);
+		int temp = min_node->value;
+		remove_node(root, NULL, temp);
+		root->value = temp;
+	}
+	else if (value < root->value) {
+		return remove_node(root->left, root, value);
+	}
+	return remove_node(root->right, root, value);
 }
 
 void print_tabs(int level)
@@ -86,19 +129,28 @@ void print_tree(Node *root)
 
 int main(void)
 {
-	Node *root = NULL;
-	Node *root2 = NULL;
+	Node *root = NULL;	
 
-	/*
-	insert_node(&root, 15);
-	insert_node(&root, 11);
-	insert_node(&root, 24);
+	insert_node(&root, 12);
+	insert_node(&root, 4);
 	insert_node(&root, 5);
-	insert_node(&root, 19);
-	insert_node(&root, 16);
+	
+	insert_node(&root, 84);
+	insert_node(&root, 50);
+	insert_node(&root, 55);
 
+	insert_node(&root, 86);
+	insert_node(&root, 85);
+	insert_node(&root, 88);
 
-	*/
+	int node_to_remove;
+	scanf("%d", &node_to_remove);
+
+	bool is_removed = remove_node(root, NULL, node_to_remove);
+	
+	if (is_removed) {
+		printf(root);
+	}
 
 	return 0;
 }
