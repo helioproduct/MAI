@@ -149,7 +149,7 @@ int main(void)
 	bool is_removed = remove_node(root, NULL, node_to_remove);
 	
 	if (is_removed) {
-		printf(root);
+		print_tree(root);
 	}
 
 	return 0;
