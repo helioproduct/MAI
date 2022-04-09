@@ -21,6 +21,4 @@ bool remove_node(Node *root, Node *prev, int value);
 
 void export_tree(Node *root);
 
-int height(Node *root);
-
 #endif // NODE
