@@ -127,6 +127,16 @@ void print_tree(Node *root)
 	print_tree_rec(root, 0);
 }
 
+int height(Node *root)
+{
+	if (root == NULL) {
+		return 0;
+	}
+	int left = height(root->left) + 1;
+	int right = height(root->right) + 1;
+	return left > right ? left : right;
+}
+
 int main(void)
 {
 	Node *root = NULL;	
@@ -143,14 +153,8 @@ int main(void)
 	insert_node(&root, 85);
 	insert_node(&root, 88);
 
-	int node_to_remove;
-	scanf("%d", &node_to_remove);
-
-	bool is_removed = remove_node(root, NULL, node_to_remove);
-	
-	if (is_removed) {
-		print_tree(root);
-	}
+	print_tree(root);
+	printf("\n %d", height(root));
 
 	return 0;
 }
