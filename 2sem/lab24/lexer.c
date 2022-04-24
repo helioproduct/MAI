@@ -139,7 +139,6 @@ int token_read(Token *token, bool *can_be_unary)
             token->data.operator = c;
             *can_be_unary = false;
         }
-        //    else return INPUT_ERROR;
     }
 
     return !is_end_of_expression(c);
