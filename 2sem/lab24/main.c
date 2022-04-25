@@ -1,24 +1,29 @@
 #include <stdio.h>
-#include "lexer.h"
+#include <stdbool.h>
 
+#include "lexer.c"
 #include "stack.c"
 
 int main(void)
 {
-	Token first;
-	Token second;
-	Token third;
+	bool can_be_unary = true;
 
+	Token token;
 	Stack stack;
 
 	stack_create(&stack);
 
-	stack_push(&stack, (StackItemType*) &first);
-	stack_push(&stack, (StackItemType*) &second);
-	stack_push(&stack, (StackItemType*) &third);
+	while (token_read(&token, &can_be_unary))
+	{
+		stack_push(&stack, (StackItemType*) &token);
+		token_print(&token);
+		printf("\n");
 
-	printf("%d\n", stack.size);
-	printf("%d\n", stack.size);
+
+		token_read(&token, &can_be_unary);
+	}
+
+	printf("%d", stack.size);
 
 	return 0;
 }
