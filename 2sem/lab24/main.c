@@ -1,29 +1,27 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "tree.c"
 #include "lexer.c"
 #include "stack.c"
+#include "parser.c"
 
 int main(void)
 {
-	bool can_be_unary = true;
+    bool can_be_unary = true;
+    Token token;
 
-	Token token;
-	Stack stack;
+    Stack postfix_stack;
+    Stack operators_and_brackets_stack;
 
-	stack_create(&stack);
+    stack_create(&postfix_stack);
+    stack_create(&operators_and_brackets_stack);
 
-	while (token_read(&token, &can_be_unary))
-	{
-		stack_push(&stack, (StackItemType*) &token);
-		token_print(&token);
-		printf("\n");
+    while (token_read(&token, &can_be_unary)) {
+        infix_to_postfix(&token, &postfix_stack, &operators_and_brackets_stack);
+    }
 
+    printf("%d", )
 
-		token_read(&token, &can_be_unary);
-	}
-
-	printf("%d", stack.size);
-
-	return 0;
+    return 0;
 }

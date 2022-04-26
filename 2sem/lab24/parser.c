@@ -2,12 +2,6 @@
 #include "parser.h"
 
 
-int operator_is_left_associative(Operator operator)
-{
-    return operator == '+' || operator == '-' || operator == '*' || operator == '/';
-}
-
-
 Priority priority(Operator operator)
 {
     if (operator == '+' || operator == '-') {
@@ -23,11 +17,16 @@ Priority priority(Operator operator)
 }
 
 
+int operator_is_left_associative(Operator operator)
+{
+    // return operator == '+' || operator == '-' || operator == '*' || operator == '/';
+    return operator == '+' || operator == '*';
+}
+
+
 void infix_to_postfix(Token *token, Stack *postfix_stack , Stack *operators_and_brackets_stack)
 {
-    if (token_is_integer_value(token) ||
-            token_is_double_value(token) ||
-            (token_is_variable(token))) {
+    if (!token_is_operator(token) && !token_is_brasket(token)) {
         stack_push(postfix_stack, token);
     }
     
