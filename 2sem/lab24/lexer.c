@@ -11,7 +11,7 @@ int is_variable(char c)
     return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
 }
 
-int is_brasket(char c)
+int is_bracket(char c)
 {
     return c == '(' || c == ')';
 }
@@ -66,9 +66,19 @@ int token_is_variable(Token *token)
     return token->type == VARIABLE;
 }
 
-int token_is_brasket(Token *token)
+int token_is_bracket(Token *token)
 {
     return token->type == BRACKET;
+}
+
+int token_is_left_bracket(Token *token)
+{
+    return token_is_bracket(token) && token->data.bracket == LEFT_BRACKET;
+}
+
+int token_is_right_bracket(Token *token)
+{
+    return token_is_bracket(token) && token->data.bracket == RIGHT_BRACKET;
 }
 
 int token_is_integer_value(Token *token)
@@ -84,8 +94,15 @@ int token_is_double_value(Token *token)
 int token_is_positive_integer_value(Token *token)
 {
     return token_is_integer_value(token) && token->data.int_value >= 0;
-
 }
+
+int token_is_operand(Token *token)
+{
+    return token_is_variable(token) || 
+           token_is_integer_value(token) ||
+           token_is_double_value(token);
+}
+
 
 int token_read(Token *token, bool *can_be_unary)
 {
@@ -118,7 +135,7 @@ int token_read(Token *token, bool *can_be_unary)
             *can_be_unary = false;
         }
 
-        else if (is_brasket(c)) {
+        else if (is_bracket(c)) {
             token->type = BRACKET;
             if (c == '(') {
                 token->data.bracket = LEFT_BRACKET;
@@ -159,7 +176,7 @@ void token_print(Token *token)
     else if (token_is_binary_operator(token) || token_is_unary_operator(token)) {
         printf("%c", token->data.operator);
     }
-    else if (token_is_brasket(token)) {
+    else if (token_is_bracket(token)) {
         if (token->data.bracket == LEFT_BRACKET) {
         	printf("(");
         }

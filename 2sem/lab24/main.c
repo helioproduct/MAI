@@ -6,6 +6,7 @@
 #include "stack.c"
 #include "parser.c"
 
+
 int main(void)
 {
     bool can_be_unary = true;
@@ -21,7 +22,12 @@ int main(void)
         infix_to_postfix(&token, &postfix_stack, &operators_and_brackets_stack);
     }
 
-    printf("%d", )
+    while (!stack_is_empty(&postfix_stack)) {
+        token_print(stack_top(&postfix_stack));
+        printf("\n");
+        stack_pop(&postfix_stack);
+    }
 
     return 0;
 }
+

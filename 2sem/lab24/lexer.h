@@ -8,7 +8,7 @@ typedef enum {
 	DOUBLE_VALUE,
 	VARIABLE,
     BINARY_OPERATOR,
-    UNARY_OPERATOR
+    UNARY_OPERATOR,
     BRACKET
 } TokenType;
 
@@ -29,7 +29,7 @@ typedef struct {
 
 int is_operator(char c);
 int is_variable(char c);
-int is_brasket(char c);
+int is_bracket(char c);
 int is_number(char c);
 int is_space(char c);
 int is_end_of_expression(char c);
@@ -37,11 +37,12 @@ int is_end_of_expression(char c);
 int token_is_unary_operator(Token *token);
 int token_is_binary_operator(Token *token);
 int token_is_operator(Token *token);
+int token_is_operand(Token *token);
 int token_is_plus(Token *token);
 int token_is_minus(Token *token);
 int token_is_power(Token *token);
 int token_is_variable(Token *token);
-int token_is_brasket(Token *token);
+int token_is_bracket(Token *token);
 int token_is_integer_value(Token *token);
 int token_is_double_value(Token *token);
 int token_is_positive_integer_value(Token *token);
