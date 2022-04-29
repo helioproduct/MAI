@@ -22,20 +22,20 @@ int main(void)
         infix_to_postfix(&token, &postfix_stack, &operators_and_brackets_stack);
     }
 
-    while(!stack_is_empty(&operators_and_brackets_stack)) {
+    while (!stack_is_empty(&operators_and_brackets_stack)) {
         stack_push(&postfix_stack, stack_top(&operators_and_brackets_stack));
         stack_pop(&operators_and_brackets_stack);
     }
 
-    /*
     while (!stack_is_empty(&postfix_stack)) {
         token_print(stack_top(&postfix_stack));
         printf("\n");
         stack_pop(&postfix_stack);
     }
-    */
 
-    
+    stack_destroy(&postfix_stack);
+    stack_destroy(&operators_and_brackets_stack);
+
     return 0;
 }
 
