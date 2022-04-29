@@ -42,7 +42,11 @@ int token_is_plus(Token *token);
 int token_is_minus(Token *token);
 int token_is_power(Token *token);
 int token_is_variable(Token *token);
+
 int token_is_bracket(Token *token);
+int token_is_left_bracket(Token *token);
+int token_is_right_bracket(Token *token);
+
 int token_is_integer_value(Token *token);
 int token_is_double_value(Token *token);
 int token_is_positive_integer_value(Token *token);
