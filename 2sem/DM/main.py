@@ -31,7 +31,7 @@ def reverse_arc(adjacency_matrix, arc):
 
 
 # Разрушат указанный контур в орграфе
-# Возвращает матриц смежности полученнго орграфа
+# Возвращает матрицы смежности полученных орграфов
 def destroy_circuit(adjacency_matrix, circuit):
     arcs = set()
     solutions = []
@@ -91,10 +91,6 @@ def sort_by_levels(G):
     return levels
 
 
-def adjacency_lists(adjacency_matrix):
-    return {i: np.nonzero(row)[0].tolist() for i,row in enumerate(adjacency_matrix)}
-
-
 # Упорядочивание вершин бесконтурного ориентированного графа 
 # согласно частичному порядку, заданному ребрами орграфа 
 # на множестве его вершин.
@@ -102,7 +98,11 @@ def adjacency_lists(adjacency_matrix):
 def complement_to_liniear_order(G):
     levels = sort_by_levels(G)
     p = [permutations(level) for level in levels]
-    return [x for x in list(product(*p))]
+    order = [x for x in list(product(*p))]
+    result = []
+    for x in order:
+        result.append(x)
+    return result
 
 
 def main():
@@ -125,7 +125,13 @@ def main():
     visualize(adjacency_matrix)
     
     for order in complement_to_liniear_order(adjacency_matrix):
-        print(order)
-        
+        result = []
+        for t in order:
+            for e in t:
+                result.append(e)
+        print(result)
+
+
+
 if __name__ == '__main__':
     main()
