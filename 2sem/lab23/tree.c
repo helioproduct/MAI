@@ -85,6 +85,7 @@ bool remove_node(Node *root, Node *prev, int value)
 		int temp = min_node->value;
 		remove_node(root, NULL, temp);
 		root->value = temp;
+		return true;
 	}
 
 	else if (value < root->value) {
@@ -175,20 +176,21 @@ int width(Node *root)
 	return mx;	
 }
 
+
+
 int main(void)
 {
 	Node *root = create_node(12);
 	
 	insert_node(&root, 4);
 	insert_node(&root, 5);
-	
-	insert_node(&root, 84);
-	insert_node(&root, 50);
-	insert_node(&root, 55);
+	insert_node(&root, 6);
+	insert_node(&root, 7);
+	insert_node(&root, 40);
+	insert_node(&root, 37);
+	insert_node(&root, 41);
 
-	insert_node(&root, 86);
-	insert_node(&root, 85);
-	insert_node(&root, 88);
+	print_tree(root);
 
 	printf("%d\n", width(root));
 
