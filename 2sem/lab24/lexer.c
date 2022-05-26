@@ -1,187 +1,105 @@
-#include "lexer.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 
-int is_operator(char c)
+#include "lexer.h"
+
+
+void token_next(Token *t)
 {
-    return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
-}
-
-int is_variable(char c)
-{
-    return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
-}
-
-int is_bracket(char c)
-{
-    return c == '(' || c == ')';
-}
-
-int is_number(char c)
-{
-    return c >= '0' && c <= '9';
-}
-
-int is_space(char c)
-{
-    return c == ' ' || c == '\t';
-}
-
-int is_end_of_expression(char c)
-{
-    return c == '\n';
-}
-
-int token_is_unary_operator(Token *token)
-{
-    return token->type == UNARY_OPERATOR;
-}
-
-int token_is_binary_operator(Token *token)
-{
-    return token->type == BINARY_OPERATOR;
-}
-
-int token_is_operator(Token *token)
-{
-    return token_is_binary_operator(token) || token_is_unary_operator(token);
-}
-
-int token_is_plus(Token *token)
-{
-    return token_is_operator(token) && (token->data.operator == '+');
-}
-
-int token_is_minus(Token *token)
-{
-    return token_is_operator(token) && (token->data.operator == '-');
-}
-
-int token_is_power(Token *token)
-{
-    return token_is_operator(token) && (token->data.operator == '^');
-}
-
-int token_is_variable(Token *token)
-{
-    return token->type == VARIABLE;
-}
-
-int token_is_bracket(Token *token)
-{
-    return token->type == BRACKET;
-}
-
-int token_is_left_bracket(Token *token)
-{
-    return token_is_bracket(token) && token->data.bracket == LEFT_BRACKET;
-}
-
-int token_is_right_bracket(Token *token)
-{
-    return token_is_bracket(token) && token->data.bracket == RIGHT_BRACKET;
-}
-
-int token_is_integer_value(Token *token)
-{
-    return token->type == INTEGER_VALUE;
-}
-
-int token_is_double_value(Token *token)
-{
-    return token->type == DOUBLE_VALUE;
-}
-
-int token_is_positive_integer_value(Token *token)
-{
-    return token_is_integer_value(token) && token->data.int_value >= 0;
-}
-
-int token_is_operand(Token *token)
-{
-    return token_is_variable(token) || 
-           token_is_integer_value(token) ||
-           token_is_double_value(token);
-}
-
-
-int token_read(Token *token, bool *can_be_unary)
-{
+    static bool can_be_unary = true;
     char c;
-    c = fgetc(stdin);
-
-    if (!is_end_of_expression(c)) {
-
-        while (is_space(c)) {
+    
+    do {
+        c = fgetc(stdin);
+    } while (isspace(c));
+    
+    if (c == EOF || c == '\n') {
+        t->type = FINAL;
+    }
+    
+    else if (isalpha(c) || c == '_') {
+        t->type = VARIABLE;
+        t->data.variable_name = c;
+        can_be_unary = false;
+    }
+    
+    else if (isdigit(c)) { // Числа
+        float result;
+        ungetc(c, stdin);
+        scanf("%f", &result);
+        
+        if (result == (int) result) {
+            t->type = INTEGER;
+            t->data.value_int = (int) result;
+        } else {
+            t->type = FLOATING;
+            t->data.value_float = result;
+        }
+        can_be_unary = false;
+    }
+    
+    else if (c == '(' || c == ')') {
+        t->type = BRACKET;
+        t->data.is_left_bracket = (c == '(');
+        can_be_unary = t->data.is_left_bracket;
+    }
+    
+    // Учёт минуса перед числом
+    else if (can_be_unary && (c == '-' || c == '+')) {
+        int m = (c == '+') ? +1 : -1; // Знак
+        
+        do {
             c = fgetc(stdin);
-        }
-
-        if (is_variable(c)) {
-            token->type = VARIABLE;
-            token->data.variable = c;
-        }
-
-        else if (is_number(c)) {
+        } while (isspace(c));
+        
+        if (isdigit(c)) {
             ungetc(c, stdin);
-            double value;
-            scanf("%lf", &value);
-
-            if (value == (int)value) {
-                token->type = INTEGER_VALUE;
-                token->data.int_value = (int)value;
+            token_next(t); // После минуса и т.д. надо число считать
+            if (t->type == INTEGER) {
+                t->data.value_int = m * (t->data.value_int);
             } else {
-                token->type = DOUBLE_VALUE;
-                token->data.double_value = value;
+                t->data.value_float = m * (t->data.value_float);
             }
-            *can_be_unary = false;
-        }
-
-        else if (is_bracket(c)) {
-            token->type = BRACKET;
-            if (c == '(') {
-                token->data.bracket = LEFT_BRACKET;
-                *can_be_unary = true;
-            } else  {
-                token->data.bracket = RIGHT_BRACKET;
-                *can_be_unary = false;
-            }
-        }
-
-        else if (is_operator(c)) {
-            if (*can_be_unary == true) {
-                token->type = UNARY_OPERATOR;
-
-            } else {
-                token->type = BINARY_OPERATOR;
-            }
-            token->data.operator = c;
-            *can_be_unary = false;
+        } else {
+            ungetc(c, stdin);
+            t->type = OPERATOR;
+            t->data.operator_name = '-';
+            can_be_unary = true;
         }
     }
-
-    return !is_end_of_expression(c);
+    
+    else {
+        t->type = OPERATOR;
+        t->data.operator_name = c;
+        can_be_unary = true;
+    }
 }
 
-
-void token_print(Token *token)
+void token_print(Token *t)
 {
-    if (token_is_integer_value(token)) {
-        printf("%d", token->data.int_value);
+    switch (t->type) {
+        case FINAL:
+            break;
+        case INTEGER:
+            printf("%d", t->data.value_int);
+            break;
+        case FLOATING:
+            printf("%lg", t->data.value_float);
+            break;
+        case VARIABLE:
+            printf("%c", t->data.variable_name);
+            break;
+        case OPERATOR:
+            printf("%c", t->data.operator_name);
+            break;
+        case BRACKET:
+            printf("%c", (t->data.is_left_bracket) ? '(' : ')');
+            break;
     }
-    else if (token_is_double_value(token)) {
-        printf("%.4lf", token->data.double_value);
-    }
-    else if (token_is_variable(token)) {
-        printf("%c", token->data.variable);
-    }
-    else if (token_is_binary_operator(token) || token_is_unary_operator(token)) {
-        printf("%c", token->data.operator);
-    }
-    else if (token_is_bracket(token)) {
-        if (token->data.bracket == LEFT_BRACKET) {
-        	printf("(");
-        }
-        else {
-            printf(")");
-        }
-    }
+}
+
+bool token_is_operator(Token *token)
+{
+    return token->type == OPERATOR;
 }

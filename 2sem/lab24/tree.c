@@ -1,82 +1,123 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
 
 #include "tree.h"
 
-Node *tree_node_create(Token *token)
+int get_priority(char c)
 {
-    Node *node = (Node *)malloc(sizeof(Node));
-
-    node->token = *token;
-    node->left = NULL;
-    node->right = NULL;
-
-    return node;
+    switch (c) { // Приоритеты операций
+        case '+': case '-': return 1;
+        case '*': case '/': return 2;
+        case '^': return 3;
+    }
+    return 100; // Приоритет чисел, скобок, переменных, etc.
 }
 
-void tree_build(Node **node, Stack *postfix_stack)
+Tree tree_create(Token tokens[], int idx_left, int idx_right)
 {
-    Token token;
+    Tree t = (Tree) malloc(sizeof(struct tree_node));
+    if (idx_left > idx_right) { // Для корректной обработки унарного минуса
+        return NULL;
+    }
 
-    if (!stack_is_empty(postfix_stack)) {
-        token = *stack_top(postfix_stack);
-        stack_pop(postfix_stack);
+    if (idx_left == idx_right) { // Тривиальный случай рекурсии (число, переменная)
+        t->node  = tokens[idx_left];
+        t->left  = NULL;
+        t->right = NULL;
+        return t;
+    }
 
-        (*node) = tree_node_create(&token);
-
-        if (token_is_operator(&token)) {
-            tree_build(&(*node)->right, postfix_stack);
-
-            if (token_is_binary_operator(&token)) {
-                tree_build(&(*node)->left, postfix_stack);
+    int priority;
+    int priority_min = get_priority('a');
+    int brackets = 0; // Счётчик открытых скобок
+    int op_pos;
+    // Поиск позиции последнего оператора с наименьшим приоритетом
+    for (int i = idx_left; i <= idx_right; ++i) {
+        if ((tokens[i].type == BRACKET) && (tokens[i].data.is_left_bracket)) {
+            ++brackets;
+            continue;
+        }
+        if ((tokens[i].type == BRACKET) && !(tokens[i].data.is_left_bracket)) {
+            --brackets;
+            continue;
+        }
+        if (brackets > 0) { // Пропуск того, что в скобках
+            continue;
+        }
+        if (tokens[i].type == OPERATOR) {
+            priority = get_priority(tokens[i].data.operator_name);
+            if (priority <= priority_min) {
+                priority_min = priority;
+                op_pos = i;
             }
         }
     }
-}
+    if ((priority_min == get_priority('a')) &&
+            (tokens[idx_left].type == BRACKET) && 
+            (tokens[idx_left].data.is_left_bracket) &&
+            (tokens[idx_right].type  == BRACKET) && 
+            !(tokens[idx_right].data.is_left_bracket)) {
+        free(t);
+        return tree_create(tokens, idx_left + 1, idx_right - 1);
+    }
 
-void tree_print_subtree(Node *node, int depth)
-{
-    if (node != NULL) {
-        for (int i = 0; i < depth; ++i) {
-            printf("__");
+    // Операции +, -, * и т.п. -- левоассоциативные, а степень -- правоассоц.,
+    // т.е. 2^3^4 == 2^(3^4), а не (2^3)^4, как если бы была левоассоц.
+    if (tokens[op_pos].data.operator_name == '^') {
+        // Поэтому ищем самый левый оператор степени, связанный с текущим
+        brackets = 0;
+        for (int i = op_pos; i >= idx_left; --i) {
+            if ((tokens[i].type == BRACKET) && !(tokens[i].data.is_left_bracket)) {
+                ++brackets;
+                continue;
+            }
+            if ((tokens[i].type == BRACKET) && (tokens[i].data.is_left_bracket)) {
+                --brackets;
+                continue;
+            }
+            if (brackets > 0) {
+                continue;
+            }
+            if (tokens[i].type == OPERATOR) {
+                priority = get_priority(tokens[i].data.operator_name);
+                if (priority == 3) {
+                    op_pos = i;
+                }
+            }
         }
-
-        token_print(&(node->token)); printf("\n");
-
-        tree_print_subtree(node->left,  depth + 1);
-        tree_print_subtree(node->right, depth + 1);
     }
+
+    t->node  = tokens[op_pos]; // Запись оператора
+    t->left  = tree_create(tokens, idx_left, op_pos - 1);
+    t->right = tree_create(tokens, op_pos + 1, idx_right);
+    if (t->right == NULL) {
+        printf("Epic fail: operator at the expression's end.");
+        exit(1);
+    }
+    return t;
 }
 
-void tree_infix_linearization(Node *node) // не нужно же заморачитаться с выводом без лишних скобок?
+void tree_delete(Tree *t)
 {
-    if (node != NULL) {
-        if ((node->left != NULL) && (node->right) != NULL)
-            printf("(");
-
-        tree_infix_linearization(node->left);
-        token_print(&(node->token));
-        tree_infix_linearization(node->right);
-
-        if (node->right && node->left)
-            printf(")");
+    if ((*t) != NULL) {
+        tree_delete(&((*t)->left));
+        tree_delete(&((*t)->right));
     }
-}
-
-
-void tree_print(Node *node)
-{
-    tree_print_subtree(node, 0);
+    free(*t);
+    *t = NULL;
 }
 
 
-
-void tree_delete(Node **node)
+void tree_print(Tree t, size_t depth)
 {
-    if ((*node) != NULL) {
-        tree_delete(&((*node)->left));
-        tree_delete(&((*node)->right));
+    if (t != NULL) {
+        for (int i = 0; i < depth; ++i) {
+            printf("____");
+        }
+        token_print(&(t->node)); printf("\n");
+        tree_print(t->left,  depth + 1);
+        tree_print(t->right, depth + 1);
     }
-    free(*node);
-    *node = NULL;
 }

@@ -1,40 +1,43 @@
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
 
-#include "tree.c"
 #include "lexer.c"
-#include "stack.c"
-#include "parser.c"
+#include "tree.c"
+
+int calculte_operations(Tree tree)
+{
+    int result = 0;
+    if (tree == NULL) {
+        return result;
+    }
+    result += token_is_operator(&tree->node);
+    result += calculte_operations(tree->left);
+    result += calculte_operations(tree->right);
+
+    return result;
+}
 
 
 int main(void)
 {
-    bool can_be_unary = true;
+    Token tokens[256];
+    size_t tokens_qty = 0;
+
     Token token;
+    token_next(&token);
 
-    Stack postfix_stack;
-    Stack operators_and_brackets_stack;
-
-    stack_create(&postfix_stack);
-    stack_create(&operators_and_brackets_stack);
-
-    while (token_read(&token, &can_be_unary)) {
-        infix_to_postfix(&token, &postfix_stack, &operators_and_brackets_stack);
+    while (token.type != FINAL) {
+        tokens[tokens_qty++] = token;
+        token_next(&token);
     }
 
-    while (!stack_is_empty(&operators_and_brackets_stack)) {
-        stack_push(&postfix_stack, stack_top(&operators_and_brackets_stack));
-        stack_pop(&operators_and_brackets_stack);
-    }
+    Tree tree = tree_create(tokens, 0, tokens_qty - 1);
 
-    while (!stack_is_empty(&postfix_stack)) {
-        token_print(stack_top(&postfix_stack));
-        printf("\n");
-        stack_pop(&postfix_stack);
-    }
+    printf("\nExpression tree:\n");
+    tree_print(tree, 0);
 
-    stack_destroy(&postfix_stack);
-    stack_destroy(&operators_and_brackets_stack);
+    int result = calculte_operations(tree);
+    printf("\n%d\n", result);
 
     return 0;
 }

@@ -1,20 +1,19 @@
-#ifndef TREE
-#define TREE
+#ifndef _TREE_H_
+#define _TREE_H_
 
+#include <stdlib.h>
 #include "lexer.h"
-#include "stack.h"
 
-typedef struct Node {
-	Token token;
-	struct Node *left;
-	struct Node *right;
-} Node;
+typedef struct tree_node *Tree;
+struct tree_node {
+    Token node;
+    Tree left;
+    Tree right;
+};
 
-Node *tree_node_create(Token *token);
-void tree_build(Node **node, Stack *postfix_stack);
-void tree_print_subtree(Node *node, int depth);
-void tree_print(Node *node);
-void tree_delete(Node **node);
-void tree_infix_linearization(Node *node);
+Tree tree_create(Token tokens[], int idx_left, int idx_right);
+void tree_print(Tree t, size_t depth);
+void tree_infix(Tree t);
 
-#endif // TREE
+#endif
+

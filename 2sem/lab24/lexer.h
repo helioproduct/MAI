@@ -1,57 +1,31 @@
-#ifndef LEXER
-#define LEXER
+#ifndef __LEXER_H__
+#define __LEXER_H__
 
 #include <stdbool.h>
 
 typedef enum {
-	INTEGER_VALUE,
-	DOUBLE_VALUE,
-	VARIABLE,
-    BINARY_OPERATOR,
-    UNARY_OPERATOR,
+    FINAL,
+    INTEGER,
+    FLOATING,
+    OPERATOR,
+    VARIABLE,
     BRACKET
 } TokenType;
-
-typedef enum { LEFT_BRACKET, RIGHT_BRACKET } Bracket;
-typedef char Operator;
-typedef char Variable;
 
 typedef struct {
     TokenType type;
     union {
-        int int_value;
-        double double_value;
-        Operator operator;
-        Bracket bracket;
-        Variable variable;
+        int   value_int;
+        float value_float;
+        char  operator_name;
+        bool  is_left_bracket;
+        char  variable_name;
     } data;
 } Token;
 
-int is_operator(char c);
-int is_variable(char c);
-int is_bracket(char c);
-int is_number(char c);
-int is_space(char c);
-int is_end_of_expression(char c);
+void token_print(Token *t);
+void token_next(Token *t);
 
-int token_is_unary_operator(Token *token);
-int token_is_binary_operator(Token *token);
-int token_is_operator(Token *token);
-int token_is_operand(Token *token);
-int token_is_plus(Token *token);
-int token_is_minus(Token *token);
-int token_is_power(Token *token);
-int token_is_variable(Token *token);
+bool token_is_operator(Token *token);
 
-int token_is_bracket(Token *token);
-int token_is_left_bracket(Token *token);
-int token_is_right_bracket(Token *token);
-
-int token_is_integer_value(Token *token);
-int token_is_double_value(Token *token);
-int token_is_positive_integer_value(Token *token);
-
-int token_read(Token *token, bool *can_be_unary);
-void token_print(Token *token);
-
-#endif // LEXER
+#endif
