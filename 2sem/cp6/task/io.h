@@ -13,6 +13,4 @@ int student_write_bin(Student *s, FILE *in);
 
 void student_print(Student *s);
 
-
-
 #endif
