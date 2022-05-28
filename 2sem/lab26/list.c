@@ -152,7 +152,7 @@ void sort(List *list)
 }
 
 
-int main()
+int main(void)
 {
     int a[10] = { 7, 3, 2, 1, 0, 0, 0, 5, 9, 4 };
     List list = create_list();
