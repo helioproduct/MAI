@@ -3,6 +3,8 @@
 
 #include "io.c"
 
+#include <time.h>
+
 int main(int argc, char **argv)
 {
     if (argc != 3) {
@@ -18,10 +20,16 @@ int main(int argc, char **argv)
         exit(1);
     }
 
+    time_t start = time(NULL);
+
     Student s;
     while (student_read_txt(&s, in)) {
         student_write_bin(&s, out);
     }
+    
+    time_t finish = time(NULL);
+    printf("generated in %ld seconds\n", finish - start);
+
 
     fclose(out);
     fclose(in);

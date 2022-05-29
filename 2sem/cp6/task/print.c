@@ -17,10 +17,12 @@ int main(int argc, char **argv)
         exit(1);
     }
 
+    time_t start = time(NULL);
+
     Student s;
     while (student_read_bin(&s, in)) {
         student_print(&s);
     }
-
+        
     return 0;
 }

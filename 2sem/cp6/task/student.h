@@ -20,7 +20,6 @@ double avg_mark(Student *s)
     return (s->la + s->ma + s->dm + s->cs) / 4.0;
 }
 
-
 bool is_equal(Student *a, Student *b)
 {
 
@@ -33,5 +32,14 @@ bool is_equal(Student *a, Student *b)
            a->dm == b->dm &&
            a->cs == b->cs;
 }
+
+
+int sortstring(const void *str1, const void *str2)
+{
+    char *const *pp1 = str1;
+    char *const *pp2 = str2;
+    return strcmp(*pp1, *pp2);
+}
+
 
 #endif
