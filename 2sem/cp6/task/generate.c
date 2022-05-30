@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "io.c"
-
 #include <time.h>
+
 
 int main(int argc, char **argv)
 {

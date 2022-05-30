@@ -3,7 +3,7 @@
 #include <time.h>
 #include "student.h"
 #include "io.c"
-// #include <time.h>
+#include <time.h>
 
 
 typedef struct {
@@ -17,6 +17,7 @@ typedef struct {
 ** Выяснить, в какой группе учится максимальное число студентов 
 ** с минимальным на курсе средни баллом.
 */
+
 
 int main(int argc, char **argv)
 {
@@ -33,16 +34,15 @@ int main(int argc, char **argv)
 
     double avg = 0.0, min_avg = DBL_MAX;
     
-    StudentStat students[200] = { {0.0, ""} };
+    static StudentStat students[50000000] = { {0.0, ""} };
     int students_qty = 0;
 
-    char* min_avg_groups[200] = { "" };
+    static char* min_avg_groups[50000000] = { "" };
     int min_avg_groups_qty = 0;
 
     Student student;
 
-
-    // time_t time1 = time(NULL);
+    time_t time1 = time(NULL);
 
     while (student_read_bin(&student, source)) {
         avg = avg_mark(&student);
@@ -56,11 +56,11 @@ int main(int argc, char **argv)
     fclose(source);
 
 
-    // time_t time2 = time(NULL);
-    // printf("first loop:  %ld seconds\n", time2 - time1);
+    time_t time2 = time(NULL);
+    printf("first loop:  %ld seconds\n", time2 - time1);
 
 
-    // time_t time3 = time(NULL);
+    time_t time3 = time(NULL);
 
     for (int i = 0; i < students_qty; i++) {
         if (students[i].avg_mark == min_avg) {
@@ -68,16 +68,16 @@ int main(int argc, char **argv)
         }
     }
 
-    //time_t time4 = time(NULL);
-    // printf("second loop:  %ld seconds\n", time2 - time1);
+    time_t time4 = time(NULL);
+    printf("second loop:  %ld seconds\n", time2 - time1);
 
 
-    //time_t time5 = time(NULL);
+    time_t time5 = time(NULL);
 
     qsort(min_avg_groups, min_avg_groups_qty, sizeof(min_avg_groups[0]), sortstring);
     
-    //time_t time6 = time(NULL);
-    // printf("qsort:  %ld seconds\n", time2 - time1);
+    time_t time6 = time(NULL);
+    printf("qsort:  %ld seconds\n", time2 - time1);
 
 
     int max_gap = 0;
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     int gap = 0;
     char* prev = min_avg_groups[0];
 
-    //time_t time7 = time(NULL);
+    time_t time7 = time(NULL);
 
     for (int i = 0; i < min_avg_groups_qty; i++) {
         if (!strcmp(min_avg_groups[i], prev)) {
@@ -102,15 +102,13 @@ int main(int argc, char **argv)
         max_idx = min_avg_groups_qty - 1;
     }
     
-    /*
+    
     if (max_idx >= 0) {
         printf("%s\n", min_avg_groups[max_idx]);
     }
-    */
-
-    //time_t time8 = time(NULL);
-    //printf("third loop:  %ld seconds\n", time2 - time1);
-
+    
+    time_t time8 = time(NULL);
+    printf("third loop:  %ld seconds\n", time2 - time1);
 
     return 0;
 } 

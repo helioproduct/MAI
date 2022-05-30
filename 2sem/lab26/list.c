@@ -154,7 +154,7 @@ void sort(List *list)
 
 int main(void)
 {
-    int a[10] = { 7, 3, 2, 1, 0, 0, 0, 5, 9, 4 };
+    int a[10] = { 3, 7, 2, 1, 0, 0, 0, 5, 9, 4 };
     List list = create_list();
 
     for (int i = 0; i < 10; i++) {
