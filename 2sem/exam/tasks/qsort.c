@@ -9,8 +9,8 @@ void qsort(int arr[], int n)
 
     stack *st;
 
-    push(st, arr[n - 1]);
-    push(st, arr[0]);
+    push(st, n - 1);
+    push(st, 0);
 
     do
     {
@@ -38,13 +38,13 @@ void qsort(int arr[], int n)
         }
         
         if (left < j) {
-            push(st, arr[j]);
+            push(st, j);
             push(st, left);
         }
         
         if (i < right) {
             push(st, right);
-            push(st, arr[i]);
+            push(st, i);
         }
 
     } while (top(st) != NULL);

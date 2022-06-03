@@ -39,25 +39,41 @@ int main(int argc, char **argv)
     m++;
     n++;
 
-    // rename("temp.bin", db_path);
-    fclose(source);
-
     source = fopen(argv[1], "w");
+    dst = fopen(argv[2], "r");
 
-    for (int i = 0; i < n; i++)
+    int i = 0;
+    int curr_line = 0;
+    int curr_column = 0;
+
+    while(i < m * n)
     {
-        dst = fopen(argv[2], "r"); 
-        for (int j = 0; j < m; j += m)
+        c = getc(dst);
+        if (c == EOF) 
         {
-            c = fgetc(dst);
-            if (c == ' ' || c == '\n') {
-                j -= m;
-            } else 
-            {
-                printf("%c", c);
-            }
+            dst = fopen(argv[2], "r");
         }
-    }
+        if (c == ' ') {
+            c = fgetc(source);
+        }
+
+        if (isdigit(c)) {
+            if (i % n == curr_line) {
+                fputc(c, source);
+                i++;
+                fputc(' ', source);
+                curr_column++;
+            
+                if (curr_column == m - 1) {
+                    fputc('\n', source);
+                    curr_line++;
+                }
+            }
+        } 
+
+	}
+
+    fclose(source);
 
     return 0;
 }
