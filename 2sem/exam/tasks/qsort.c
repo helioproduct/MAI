@@ -1,36 +1,55 @@
 #include <stdio.h>  
 
 
-void qsort_rec(int* a, int l, int r)
+void qsort(int arr[], int n)
 {
-    int i = l, j = r;
-    int tmp;
-    int x = a[(l + r) / 2];
-    
-    do 
+    int base, left, right;
+    int i = 0;
+    int j = 0;
+
+    stack *st;
+
+    push(st, arr[n - 1]);
+    push(st, arr[0]);
+
+    do
     {
-        while (a[i] < x)
-            i++;
-        while (a[j] > x)
-            j--;
-            
-        if (i <= j) 
-        {
-            if (i < j) {
-                tmp=a[i];
-                a[i]=a[j];
-                a[j]=tmp;
-            }
-            i++;
-            j--;
+        left = pop(st);
+        right = pop(st);
+
+        if ((right - left) == 1 && (arr[left] > arr[right]))
+            swap(arr[left], arr[right]);
+        else {
+            base = arr[(left + right) / 2];
+            i = left;
+            j = right;
+
+            do 
+            {
+                while (base > arr[i])
+                    --i;
+                while (base < arr[j])
+                    ++j;
+                
+                if (i <= j)
+                    swap(arr[i], arr[j]);
+
+            } while (i <= j);
         }
-    } while (i <= j);
-    
-    if (i < r)
-        qsort_rec(a, i, r);
-    if (l < j)
-        qsort_rec(a, l,j);
+        
+        if (left < j) {
+            push(st, arr[j]);
+            push(st, left);
+        }
+        
+        if (i < right) {
+            push(st, right);
+            push(st, arr[i]);
+        }
+
+    } while (top(st) != NULL);
 }
+
 
 int main(void)
 {
