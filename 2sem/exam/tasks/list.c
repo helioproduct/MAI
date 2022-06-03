@@ -15,7 +15,8 @@ typedef struct {
     unsigned size;
 } List;
 
-// Сравнение списков
+
+// Сравнение списков (Вариант 2)
 bool equal(List *lhs, List *rhs)
 {
     if (lhs->size != rhs->size) {

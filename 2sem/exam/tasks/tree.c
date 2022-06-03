@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 
 int max(int lhs, int rhs)
@@ -21,17 +22,22 @@ typedef struct BinaryTree {
 } BinaryTree;
 
 
-// 
-int depth(Tree *root)
+// Вариант 4
+void depth(Tree *root, int *h, int count)
 {
-    if (root == NULL) 
-        return 0;
-    if (root->son == NULL) 
-
-    return 0;
+    if (root != NULL) {
+        if (count > *h) {
+            *h = count;
+        }
+        depth(root->son, h, count + 1);
+        depth(root->brother, h, count);
+    }
 }
 
+
 /*
+    Вариант 1. Степень дерева.
+
     Степенью вершины - количество дуг, которое из нее выходит
     Степенью дерева - максимальное количество дуг, 
     которое из вершины этого дерева
@@ -52,7 +58,7 @@ int tree_power(Tree *root)
     }
 }
 
-
+// Степень двоичного дерева
 int binary_tree_power(BinaryTree *root)
 {
     int power = 0;
@@ -75,3 +81,15 @@ int binary_tree_power(BinaryTree *root)
     return max(1, binary_tree_power(next));
 }
 
+
+
+bool remove_leaf(Tree *root, Tree *prev, int x)
+{
+	if (root == NULL) {
+        return false;
+	}
+    if (root->son == NULL) {
+        free(root);
+    }   
+    
+}
