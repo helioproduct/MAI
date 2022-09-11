@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Compiled source #
 ###################
 *.com
@@ -41,3 +42,6 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+=======
+.idea
+>>>>>>> 5e9d13f (Доабвил первую лекцию по Python и стратые лекции по git от @murych)
